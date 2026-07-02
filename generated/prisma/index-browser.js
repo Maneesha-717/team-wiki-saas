@@ -161,6 +161,14 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.OrganizationMemberScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  organizationId: 'organizationId',
+  role: 'role',
+  joinedAt: 'joinedAt'
+};
+
 exports.Prisma.VerificationTokenScalarFieldEnum = {
   identifier: 'identifier',
   token: 'token',
@@ -181,13 +189,18 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.OrganizationRole = exports.$Enums.OrganizationRole = {
+  OWNER: 'OWNER',
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER'
+};
 
 exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   User: 'User',
   Organization: 'Organization',
+  OrganizationMember: 'OrganizationMember',
   VerificationToken: 'VerificationToken'
 };
 

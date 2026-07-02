@@ -9,6 +9,11 @@ datasource db {
 }
 
 
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
 
 model Account {
   id                       String  @id @default(cuid())
@@ -46,6 +51,8 @@ model User {
   accounts      Account[]
  
   sessions      Session[]
+
+   organizationMemberships OrganizationMember[]
 }
 
 model Organization {
@@ -55,6 +62,25 @@ model Organization {
   logo      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  members OrganizationMember[]
+}
+
+model OrganizationMember {
+  id             String @id @default(cuid())
+
+  userId         String
+  organizationId String
+
+  role           OrganizationRole @default(MEMBER)
+
+  joinedAt       DateTime @default(now())
+
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
 }
 
 model VerificationToken {
