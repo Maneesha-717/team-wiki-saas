@@ -52,6 +52,8 @@ model User {
   sessions Session[]
 
   organizationMemberships OrganizationMember[]
+
+  documents Document[] @relation("CreatedDocuments")
 }
 
 model Organization {
@@ -62,7 +64,8 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members OrganizationMember[]
+  members    OrganizationMember[]
+  workspaces Workspace[]
 }
 
 model OrganizationMember {
@@ -80,6 +83,42 @@ model OrganizationMember {
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([userId, organizationId])
+}
+
+model Workspace {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  organizationId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  documents Document[]
+}
+
+model Document {
+  id String @id @default(cuid())
+
+  title   String
+  content String? @db.Text
+
+  workspaceId String
+
+  createdById String
+
+  isPublished Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy User      @relation("CreatedDocuments", fields: [createdById], references: [id])
+
+  @@index([workspaceId])
 }
 
 model VerificationToken {

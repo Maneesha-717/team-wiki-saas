@@ -169,6 +169,26 @@ exports.Prisma.OrganizationMemberScalarFieldEnum = {
   joinedAt: 'joinedAt'
 };
 
+exports.Prisma.WorkspaceScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  organizationId: 'organizationId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DocumentScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  workspaceId: 'workspaceId',
+  createdById: 'createdById',
+  isPublished: 'isPublished',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.VerificationTokenScalarFieldEnum = {
   identifier: 'identifier',
   token: 'token',
@@ -201,6 +221,8 @@ exports.Prisma.ModelName = {
   User: 'User',
   Organization: 'Organization',
   OrganizationMember: 'OrganizationMember',
+  Workspace: 'Workspace',
+  Document: 'Document',
   VerificationToken: 'VerificationToken'
 };
 
