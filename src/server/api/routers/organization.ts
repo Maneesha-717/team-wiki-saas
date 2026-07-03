@@ -1,21 +1,11 @@
-import { z } from "zod";
-
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { organizationService } from "~/server/services/organization.service";
+import { createOrganizationSchema } from "~/server/validators/organization.validator";
 
 export const organizationRouter = createTRPCRouter({
-  create: protectedProcedure
-    .input(
-      z.object({
-        name: z.string().min(3).max(100),
-        slug: z.string().min(3).max(100),
-      }),
-    )
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.organization.create({
-        data: {
-          name: input.name,
-          slug: input.slug,
-        },
-      });
+  create: publicProcedure
+    .input(createOrganizationSchema)
+    .mutation(async ({ input }) => {
+      return organizationService.createOrganization(input);
     }),
 });
