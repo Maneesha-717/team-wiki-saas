@@ -1,11 +1,27 @@
+import { OrganizationRole } from "../../../generated/prisma";
 import { db } from "~/server/db";
 
 import type { CreateOrganizationInput } from "~/server/validators/organization.validator";
 
 export class OrganizationRepository {
-  async create(data: CreateOrganizationInput) {
-    return db.organization.create({
-      data,
+  async create(data: CreateOrganizationInput, userId: string) {
+    return db.$transaction(async (tx) => {
+      const organization = await tx.organization.create({
+        data: {
+          name: data.name,
+          slug: data.slug,
+        },
+      });
+
+      await tx.organizationMember.create({
+        data: {
+          organizationId: organization.id,
+          userId,
+          role: OrganizationRole.OWNER,
+        },
+      });
+
+      return organization;
     });
   }
 

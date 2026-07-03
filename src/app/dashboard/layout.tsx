@@ -1,12 +1,20 @@
 import type { ReactNode } from "react";
+import { redirect } from "next/navigation";
+
+import { auth } from "~/server/auth";
 import Sidebar from "~/components/dashboard/sidebar";
 import Header from "~/components/dashboard/Header";
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/api/auth/signin");
+  }
   return (
     <div className="flex min-h-screen" style={{ background: "#FBFAF6" }}>
       <Sidebar />

@@ -4,7 +4,10 @@ import { organizationRepository } from "~/server/repositories/organization.repos
 import type { CreateOrganizationInput } from "~/server/validators/organization.validator";
 
 export class OrganizationService {
-  async createOrganization(data: CreateOrganizationInput) {
+  async createOrganization(
+    data: CreateOrganizationInput,
+    userId: string,
+  ) {
     const existingOrganization =
       await organizationRepository.findBySlug(data.slug);
 
@@ -15,7 +18,7 @@ export class OrganizationService {
       });
     }
 
-    return organizationRepository.create(data);
+    return organizationRepository.create(data, userId);
   }
 }
 
