@@ -40,6 +40,23 @@ export class OrganizationRepository {
       },
     });
   }
+
+  async findByUserId(userId: string) {
+  return db.organization.findMany({
+    where: {
+      members: {
+        some: {
+          userId,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+}
+
+
 }
 
 export const organizationRepository = new OrganizationRepository();

@@ -20,6 +20,12 @@ export class OrganizationService {
 
     return organizationRepository.create(data, userId);
   }
+
+  async getUserOrganizations(userId: string) {
+  return organizationRepository.findByUserId(userId);
+}
+
+
 }
 
 export const organizationService = new OrganizationService();

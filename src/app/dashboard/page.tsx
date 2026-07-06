@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useCurrentOrganization } from "~/hooks/use-current-organization";
 
 /**
  * Assumes Fraunces / Inter / JetBrains Mono are already loaded once,
@@ -20,8 +22,58 @@ function useGreeting() {
   return greeting;
 }
 
+function DashboardSkeleton() {
+  return (
+    <div className="animate-pulse">
+      <div className="h-3 w-24 rounded" style={{ background: "#E4DFD4" }} />
+      <div className="mt-3 h-7 w-56 rounded" style={{ background: "#E4DFD4" }} />
+      <div className="mt-3 h-4 w-72 rounded" style={{ background: "#F3F0E8" }} />
+      <div
+        className="mt-10 h-28 rounded"
+        style={{ background: "#F3F0E8", border: "1px dashed #E4DFD4" }}
+      />
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const greeting = useGreeting();
+  const { currentOrganization, isLoading } = useCurrentOrganization();
+
+  if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  if (!currentOrganization) {
+    return (
+      <div className="flex flex-col items-start">
+        <p
+          className="text-[11px] font-medium uppercase tracking-[0.14em]"
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B08D3F" }}
+        >
+          No organization
+        </p>
+        <h1
+          className="mt-2 text-[26px] leading-tight"
+          style={{ fontFamily: "'Fraunces', serif", fontWeight: 500, color: "#1C1B19" }}
+        >
+          You'll need an organization first
+        </h1>
+        <p className="mt-2 max-w-sm text-[15px]" style={{ color: "#6F6A62" }}>
+          Organizations hold your team's workspaces and pages. Create one to get started.
+        </p>
+        <Link
+          href="/onboarding"
+          className="mt-6 inline-flex px-4 py-2 text-[13px] font-medium text-white transition-colors"
+          style={{ background: "#1B4332", borderRadius: 6 }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = "#163728")}
+          onMouseLeave={(e) => (e.currentTarget.style.background = "#1B4332")}
+        >
+          Create organization
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -29,7 +81,7 @@ export default function DashboardPage() {
         className="text-[11px] font-medium uppercase tracking-[0.14em]"
         style={{ fontFamily: "'JetBrains Mono', monospace", color: "#B08D3F" }}
       >
-        Dashboard
+        {currentOrganization.name}
       </p>
 
       <h1

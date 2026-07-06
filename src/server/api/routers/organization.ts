@@ -11,4 +11,10 @@ export const organizationRouter = createTRPCRouter({
         ctx.session.user.id,
       );
     }),
+
+  myOrganizations: protectedProcedure.query(async ({ ctx }) => {
+    return organizationService.getUserOrganizations(
+      ctx.session.user.id,
+    );
+  }),
 });
